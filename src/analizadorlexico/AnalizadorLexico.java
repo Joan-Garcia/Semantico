@@ -6,13 +6,14 @@ import java.io.EOFException;
 
 public class AnalizadorLexico {
   private final String[][] listaPalabrasReservadas;
-  private final ListaEnlazada simbolos;
+  private final ListaEnlazada simbolos, tokens;
   private final String programa;
   private int inicio;
   
   public AnalizadorLexico(String programa){
     listaPalabrasReservadas = new String[4][2];
     simbolos = new ListaEnlazada();
+    tokens = new ListaEnlazada();
     // Llenar la lista de palabras reservadas:
     listaPalabrasReservadas[0][0] = "Palabra reservada";
     listaPalabrasReservadas[1][0] = "programa";
@@ -29,6 +30,9 @@ public class AnalizadorLexico {
     
     this.programa = programa;
     this.inicio = 0;
+    
+    for (int i = 0; i < 3; i++) 
+      tokens.add(new Nodo(new ListaEnlazada()));
   }
   
   public String getToken() throws EOFException{
@@ -100,6 +104,8 @@ public class AnalizadorLexico {
           break;
         } else {
           if(esPalabraReservada(palabra)){
+            añadeFilaATokens(palabra, "Palabra reservada",
+                             String.valueOf(tokenPalabraReservada(palabra)));
             inicio++;
             return palabra;
           } else {
@@ -113,8 +119,14 @@ public class AnalizadorLexico {
             inicio++;
             palabra += programa.charAt(inicio);
             inicio++;
+            /*añadeFilaATokens(String.valueOf(programa.charAt(inicio)), 
+                           "Caracter simple", 
+                           String.valueOf(valorASCII(programa.charAt(inicio))));*/
             return palabra;
           } else {
+            añadeFilaATokens(String.valueOf(programa.charAt(inicio)), 
+                           "Caracter simple", 
+                           String.valueOf(valorASCII(programa.charAt(inicio))));
             inicio++;
             return palabra;
           }
@@ -153,6 +165,7 @@ public class AnalizadorLexico {
           //  Añade a la tabla de símbolos.
           if(!simboloRegistrado(palabra))                                       //Si no está registrado el identificador.
             añadeFilaASimbolos(palabra, "Identificador");                         //Regístralo.
+          añadeFilaATokens(palabra, "Identificador", "400");
           return "id";
         }
       case 5:
@@ -173,6 +186,7 @@ public class AnalizadorLexico {
           }
         } else {                                       //Termina el número entero
           if(esEspacio(programa.charAt(inicio))){
+            añadeFilaATokens(palabra, "Número entero", "300");
             return "intliteral";
           }else if(esMayuscula(programa.charAt(inicio)) || 
                    !esSimbolo(programa.charAt(inicio)) ||
@@ -180,8 +194,10 @@ public class AnalizadorLexico {
             estado = 0;
             error = true;
             break;
-          } else
+          } else{
+            añadeFilaATokens(palabra, "Número entero", "300");
             return "intliteral";
+          }
         }
       case 6:                                             // NÚMERO FLOTANTE
         if(esNumero(programa.charAt(inicio))){
@@ -190,6 +206,7 @@ public class AnalizadorLexico {
           estado = 6;
           break;
         } else {                                      //Termina el número float
+          añadeFilaATokens(palabra, "Número de punto flotante", "500");
           return "realliteral";
         }
     }
@@ -243,6 +260,10 @@ public class AnalizadorLexico {
     return Character.isDigit(c);
   }
   
+  private int valorASCII(char c){
+    return (int) c;
+  }
+  
   // Comprueba si una palabra forma parte de las palabras reservadas.
   public boolean esPalabraReservada(String palabra){
     for (int i = 0; i <= 3; i++)
@@ -259,4 +280,29 @@ public class AnalizadorLexico {
     return listaPalabrasReservadas;
   }
   
+  // Devuelve el token correspondiente a la palabra reservada.
+  private int tokenPalabraReservada(String palabra){
+    for (int i = 0; i <= 3; i++)
+      if(palabra.equals(listaPalabrasReservadas[i][0]))
+        return Integer.parseInt(listaPalabrasReservadas[i][1]);
+    return -1;
+  }
+  
+  private void añadeFilaATokens(String lexema, String clasificacion,
+                                String atributo){
+    ListaEnlazada temp = new ListaEnlazada();
+            
+    temp = (ListaEnlazada) tokens.get(0).getInfo();
+    temp.add(new Nodo(lexema));
+            
+    temp = (ListaEnlazada) tokens.get(1).getInfo();
+    temp.add(new Nodo(clasificacion));
+            
+    temp = (ListaEnlazada) tokens.get(2).getInfo();
+    temp.add(new Nodo(atributo));
+  }
+  
+  public ListaEnlazada getTablaTokens(){
+    return tokens;
+  }
 }

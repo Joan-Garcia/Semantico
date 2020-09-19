@@ -46,6 +46,20 @@ public class Main {
     for(int i = 0; i < s1.length; i++)
       System.out.printf("%-20s%-20s\n", s1[i], s2[i]);
     System.out.println("");
+    
+    //Impresión de la tabla de tokens:
+    temp = (ListaEnlazada) analizadorLexico.getTablaTokens().get(0).getInfo();
+    String[] t1 = temp.toArray();
+    temp = (ListaEnlazada) analizadorLexico.getTablaTokens().get(1).getInfo();
+    String[] t2 = temp.toArray();
+    temp = (ListaEnlazada) analizadorLexico.getTablaTokens().get(2).getInfo();
+    String[] t3 = temp.toArray();
+    System.out.println("\nTabla de Tokens");
+    System.out.printf("%-20s%-30s%-20s\n", "Lexema", "Clasificación", "Atributo");
+    System.out.println("------------------------------------------------------------");
+    for (int i = 0; i < t1.length; i++)
+      System.out.printf("%-20s%-30s%-20s\n", t1[i], t2[i], t3[i]);
+    System.out.println("");
   }
   
   public static void main(String[] args) {
