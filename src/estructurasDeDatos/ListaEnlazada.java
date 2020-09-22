@@ -89,6 +89,17 @@ public class ListaEnlazada {
     return size;
   }
   
+  public int indexOf(String info){
+    Nodo temp = inicio;
+    int index = 0;
+    
+    while(!temp.getInfo().equals(info)){
+      index++;
+      temp = temp.getSiguiente();
+    }
+    return index;
+  }
+  
   public boolean exist(Nodo a){
     for(Nodo temp = inicio; temp !=null ; temp = temp.getSiguiente())
       if (a.getInfo().equals(temp.getInfo()))

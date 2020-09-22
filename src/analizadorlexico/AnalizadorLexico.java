@@ -9,6 +9,17 @@ public class AnalizadorLexico {
   private final ListaEnlazada simbolos, tokens;
   private final String programa;
   private int inicio;
+  private static final String tipoToken [][] = {{"programa", "Inicio de archivo"},
+                                                {"begin",    "Inicio bloque de código"},
+                                                {"end",      "Fin bloque de código"},
+                                                {"id",       "Int"},
+                                                {":=",       "Asiganción"},
+                                                {";",        "Punto y coma"},
+                                                {"+",        "Operación Suma"},
+                                                {"-",        "Operación Resta"},
+                                                {"*",        "Operación Multiplicación"},
+                                                {"(",        "Parentesis que abre"},
+                                                {")",        "Parentesis que cierra"}};
   
   public AnalizadorLexico(String programa){
     listaPalabrasReservadas = new String[4][2];
@@ -21,9 +32,9 @@ public class AnalizadorLexico {
     listaPalabrasReservadas[3][0] = "end";
     
     listaPalabrasReservadas[0][1] = "token";
-    listaPalabrasReservadas[1][1] = "600";
-    listaPalabrasReservadas[2][1] = "601";
-    listaPalabrasReservadas[3][1] = "602";
+    listaPalabrasReservadas[1][1] = "400";
+    listaPalabrasReservadas[2][1] = "401";
+    listaPalabrasReservadas[3][1] = "402";
     
     for (int i = 0; i < 2; i++)
       simbolos.add(new Nodo(new ListaEnlazada()));
@@ -31,7 +42,7 @@ public class AnalizadorLexico {
     this.programa = programa;
     this.inicio = 0;
     
-    for (int i = 0; i < 3; i++) 
+    for (int i = 0; i < 5; i++) 
       tokens.add(new Nodo(new ListaEnlazada()));
   }
   
@@ -104,8 +115,8 @@ public class AnalizadorLexico {
           break;
         } else {
           if(esPalabraReservada(palabra)){
-            añadeFilaATokens(palabra, "Palabra reservada",
-                             String.valueOf(tokenPalabraReservada(palabra)));
+            añadeFilaATokens(palabra, "Palabra reservada", getTipoToken(palabra)
+                             ,String.valueOf(tokenPalabraReservada(palabra)));
             inicio++;
             return palabra;
           } else {
@@ -125,8 +136,8 @@ public class AnalizadorLexico {
             return palabra;
           } else {
             añadeFilaATokens(String.valueOf(programa.charAt(inicio)), 
-                           "Caracter simple", 
-                           String.valueOf(valorASCII(programa.charAt(inicio))));
+                           "Caracter simple", getTipoToken(palabra)
+                           ,String.valueOf(valorASCII(programa.charAt(inicio))));
             inicio++;
             return palabra;
           }
@@ -165,7 +176,7 @@ public class AnalizadorLexico {
           //  Añade a la tabla de símbolos.
           if(!simboloRegistrado(palabra))                                       //Si no está registrado el identificador.
             añadeFilaASimbolos(palabra, "Identificador");                         //Regístralo.
-          añadeFilaATokens(palabra, "Identificador", "400");
+          añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),"500");
           return "id";
         }
       case 5:
@@ -186,7 +197,7 @@ public class AnalizadorLexico {
           }
         } else {                                       //Termina el número entero
           if(esEspacio(programa.charAt(inicio))){
-            añadeFilaATokens(palabra, "Número entero", "300");
+            añadeFilaATokens(palabra, "Número", "Int", palabra);
             return "intliteral";
           }else if(esMayuscula(programa.charAt(inicio)) || 
                    !esSimbolo(programa.charAt(inicio)) ||
@@ -195,7 +206,7 @@ public class AnalizadorLexico {
             error = true;
             break;
           } else{
-            añadeFilaATokens(palabra, "Número entero", "300");
+            añadeFilaATokens(palabra, "Número", "Int", palabra);
             return "intliteral";
           }
         }
@@ -206,7 +217,7 @@ public class AnalizadorLexico {
           estado = 6;
           break;
         } else {                                      //Termina el número float
-          añadeFilaATokens(palabra, "Número de punto flotante", "500");
+          añadeFilaATokens(palabra, "Número", "Float", "500");
           return "realliteral";
         }
     }
@@ -288,21 +299,49 @@ public class AnalizadorLexico {
     return -1;
   }
   
-  private void añadeFilaATokens(String lexema, String clasificacion,
+  private void añadeFilaATokens(String lexema, String token, String tipo,
                                 String atributo){
     ListaEnlazada temp = new ListaEnlazada();
-            
+    
     temp = (ListaEnlazada) tokens.get(0).getInfo();
+    if (temp.exist(new Nodo<String>(lexema))){
+      int i = temp.indexOf(lexema);
+      temp = (ListaEnlazada) tokens.get(4).getInfo();
+      int v = 1 + Integer.parseInt((String) temp.get(i).getInfo());
+      temp.get(i).setInfo(String.valueOf(v));
+    } else {
     temp.add(new Nodo(lexema));
             
     temp = (ListaEnlazada) tokens.get(1).getInfo();
-    temp.add(new Nodo(clasificacion));
-            
+    temp.add(new Nodo(token));
+    
     temp = (ListaEnlazada) tokens.get(2).getInfo();
+    temp.add(new Nodo(tipo));
+    
+    temp = (ListaEnlazada) tokens.get(3).getInfo();
     temp.add(new Nodo(atributo));
+    
+    temp = (ListaEnlazada) tokens.get(4).getInfo();
+    temp.add(new Nodo("1"));
+    }
   }
   
   public ListaEnlazada getTablaTokens(){
     return tokens;
+  }
+  
+  private String getTipoToken(String lexema) {
+    for (int i = 0; i < 11; i++)
+      if (tipoToken[i][0].equals(lexema))
+        return tipoToken[i][1];
+    return "x";
+  }
+  
+  private boolean lexemaRepetido(String lexema) {
+    ListaEnlazada temp = new ListaEnlazada();
+    temp = (ListaEnlazada) tokens.get(0).getInfo();
+    if (temp.exist(new Nodo<String>(lexema)))
+      return true;
+    return false;
   }
 }
