@@ -13,7 +13,7 @@ public class AnalizadorLexico {
                                                 {"begin",    "Inicio bloque de código"},
                                                 {"end",      "Fin bloque de código"},
                                                 {"id",       "Int"},
-                                                {":=",       "Asiganción"},
+                                                {":=",       "Asignación"},
                                                 {";",        "Punto y coma"},
                                                 {"+",        "Operación Suma"},
                                                 {"-",        "Operación Resta"},
@@ -127,12 +127,12 @@ public class AnalizadorLexico {
         if(esSimbolo(programa.charAt(inicio))){
           palabra += programa.charAt(inicio);
           if(programa.charAt(inicio) == ':' && programa.charAt(inicio + 1) == '='){
+            // Caso de símbolo de asignación.
+            añadeFilaATokens(":=", "Símbolo especial", getTipoToken(":="), "403");
             inicio++;
             palabra += programa.charAt(inicio);
             inicio++;
-            /*añadeFilaATokens(String.valueOf(programa.charAt(inicio)), 
-                           "Caracter simple", 
-                           String.valueOf(valorASCII(programa.charAt(inicio))));*/
+            
             return palabra;
           } else {
             añadeFilaATokens(String.valueOf(programa.charAt(inicio)), 
@@ -176,7 +176,9 @@ public class AnalizadorLexico {
           //  Añade a la tabla de símbolos.
           if(!simboloRegistrado(palabra))                                       //Si no está registrado el identificador.
             añadeFilaASimbolos(palabra, "Identificador");                         //Regístralo.
-          añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),"500");
+          
+          ListaEnlazada temp = (ListaEnlazada) simbolos.get(0).getInfo();       //Para obtener la longitud de la lista y con ello el valor de id
+          añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),String.valueOf(500 + temp.size()));
           return "id";
         }
       case 5:
