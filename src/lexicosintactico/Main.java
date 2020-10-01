@@ -39,12 +39,21 @@ public class Main {
     String[] s1 = temp.toArray();
     temp = (ListaEnlazada) analizadorLexico.getTablaSimbolos().get(1).getInfo();
     String[] s2 = temp.toArray();
+    temp = (ListaEnlazada) analizadorLexico.getTablaSimbolos().get(2).getInfo();
+    String[] s3 = temp.toArray();
+    temp = (ListaEnlazada) analizadorLexico.getTablaSimbolos().get(3).getInfo();
+    String[] s4 = temp.toArray();
+    temp = (ListaEnlazada) analizadorLexico.getTablaSimbolos().get(4).getInfo();
+    String[] s5 = temp.toArray();
+    temp = (ListaEnlazada) analizadorLexico.getTablaSimbolos().get(5).getInfo();
+    String[] s6 = temp.toArray();
     
     System.out.println("\nTabla de Simbolos");
-    System.out.printf("%-20s%-20s\n", "Lexema", "Clasificación");
-    System.out.println("----------------------------------");
+    System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s\n", "Nombre", "Tipo", "Valor de Id", "Repeticiones", "Linea", "Valor Atributo");
+    System.out.println("-------------------------------------------------------"
+            + "--------------------------------------------------------------------");
     for(int i = 0; i < s1.length; i++)
-      System.out.printf("%-20s%-20s\n", s1[i], s2[i]);
+      System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s\n", s1[i], s2[i], s3[i], s4[i], s5[i], s6[i]);
     System.out.println("");
     
     //Impresión de la tabla de tokens:

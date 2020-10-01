@@ -8,7 +8,7 @@ public class AnalizadorLexico {
   private final String[][] listaPalabrasReservadas;
   private final ListaEnlazada simbolos, tokens;
   private final String programa;
-  private int inicio;
+  private int inicio, numero_id;                                                // numero_id lleva el conteo de los identificadores.
   private static final String tipoToken [][] = {{"programa", "Inicio de archivo"},
                                                 {"begin",    "Inicio bloque de código"},
                                                 {"end",      "Fin bloque de código"},
@@ -36,11 +36,12 @@ public class AnalizadorLexico {
     listaPalabrasReservadas[2][1] = "401";
     listaPalabrasReservadas[3][1] = "402";
     
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 6; i++)
       simbolos.add(new Nodo(new ListaEnlazada()));
     
     this.programa = programa;
     this.inicio = 0;
+    this.numero_id = 0;
     
     for (int i = 0; i < 5; i++) 
       tokens.add(new Nodo(new ListaEnlazada()));
@@ -174,11 +175,12 @@ public class AnalizadorLexico {
             break;
           }
           //  Añade a la tabla de símbolos.
-          if(!simboloRegistrado(palabra))                                       //Si no está registrado el identificador.
-            añadeFilaASimbolos(palabra, "Identificador");                         //Regístralo.
+//          if(!simboloRegistrado(palabra))                                       //Si no está registrado el identificador.
+//          añadeFilaASimbolos(palabra, "Int", );                         //Regístralo.
           
-          ListaEnlazada temp = (ListaEnlazada) simbolos.get(0).getInfo();       //Para obtener la longitud de la lista y con ello el valor de id
-          añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),String.valueOf(500 + temp.size()));
+//          ListaEnlazada temp = (ListaEnlazada) simbolos.get(0).getInfo();       //Para obtener la longitud de la lista y con ello el valor de id
+          añadeFilaASimbolos(palabra, "Int", String.valueOf(500 + numero_id), "--", false);
+          añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),String.valueOf(500 + numero_id));
           return "id";
         }
       case 5:
@@ -199,6 +201,7 @@ public class AnalizadorLexico {
           }
         } else {                                       //Termina el número entero
           if(esEspacio(programa.charAt(inicio))){
+            añadeFilaASimbolos(palabra, "Int", palabra, "--", true);
             añadeFilaATokens(palabra, "Número", "Int", palabra);
             return "intliteral";
           }else if(esMayuscula(programa.charAt(inicio)) || 
@@ -208,6 +211,7 @@ public class AnalizadorLexico {
             error = true;
             break;
           } else{
+            añadeFilaASimbolos(palabra, "Int", palabra, "--", true);
             añadeFilaATokens(palabra, "Número", "Int", palabra);
             return "intliteral";
           }
@@ -219,6 +223,7 @@ public class AnalizadorLexico {
           estado = 6;
           break;
         } else {                                      //Termina el número float
+          añadeFilaASimbolos(palabra, "Real", palabra, "--", true);
           añadeFilaATokens(palabra, "Número", "Float", "500");
           return "realliteral";
         }
@@ -226,14 +231,40 @@ public class AnalizadorLexico {
     throw new EOFException();
   }
   
-  private void añadeFilaASimbolos(String lexema, String clasificacion){
+  private void añadeFilaASimbolos(String lexema, String tipo, String id,
+                                  String linea, boolean numero){
     ListaEnlazada temp = new ListaEnlazada();
-            
+    
     temp = (ListaEnlazada) simbolos.get(0).getInfo();
-    temp.add(new Nodo(lexema));
+    if (simboloRegistrado(lexema)){
+      int i = temp.indexOf(lexema);
+      temp = (ListaEnlazada) simbolos.get(3).getInfo();
+      int v = 1 + Integer.parseInt((String) temp.get(i).getInfo());
+      temp.get(i).setInfo(String.valueOf(v));
+    } else {
+      temp.add(new Nodo(lexema));
             
-    temp = (ListaEnlazada) simbolos.get(1).getInfo();
-    temp.add(new Nodo(clasificacion));
+      temp = (ListaEnlazada) simbolos.get(1).getInfo();
+      temp.add(new Nodo(tipo));
+    
+      temp = (ListaEnlazada) simbolos.get(2).getInfo();
+      temp.add(new Nodo(id));
+    
+      temp = (ListaEnlazada) simbolos.get(3).getInfo();
+      temp.add(new Nodo("1"));
+    
+      temp = (ListaEnlazada) simbolos.get(4).getInfo();
+      temp.add(new Nodo(linea));
+      
+      if (!numero) {
+        numero_id++;
+        temp = (ListaEnlazada) simbolos.get(5).getInfo();
+        temp.add(new Nodo("0"));
+      } else {
+        temp = (ListaEnlazada) simbolos.get(5).getInfo();
+        temp.add(new Nodo(id)); 
+      }
+    }
   }
   
   // Comprueba si un símbolo ya existe en la tabla de símbolos.
