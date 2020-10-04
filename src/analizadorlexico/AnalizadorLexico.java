@@ -9,6 +9,7 @@ public class AnalizadorLexico {
   private final ListaEnlazada simbolos, tokens;
   private final String programa;
   private int inicio, numero_id;                                                // numero_id lleva el conteo de los identificadores.
+  private int linea;                                                            // contador de línea del programa
   private static final String tipoToken [][] = {{"programa", "Inicio de archivo"},
                                                 {"begin",    "Inicio bloque de código"},
                                                 {"end",      "Fin bloque de código"},
@@ -42,6 +43,7 @@ public class AnalizadorLexico {
     this.programa = programa;
     this.inicio = 0;
     this.numero_id = 0;
+    this.linea = 1;
     
     for (int i = 0; i < 5; i++) 
       tokens.add(new Nodo(new ListaEnlazada()));
@@ -53,6 +55,8 @@ public class AnalizadorLexico {
     boolean error  = false;
     palabra = "";
     estado = 0;
+    
+    System.out.println(programa);
     
     if(inicio == programa.length())
       throw new EOFException();
@@ -86,6 +90,11 @@ public class AnalizadorLexico {
         } else if(esEspacio(programa.charAt(inicio))){
           inicio++;
           estado = 0;
+          break;
+        } else if(new Character(programa.charAt(inicio)).equals('&')){          // Cambio de línea
+          inicio++;
+          estado = 0;
+          linea++;
           break;
         } else {                                      //Es caracter no permitido
           palabra += programa.charAt(inicio);
@@ -179,8 +188,10 @@ public class AnalizadorLexico {
 //          añadeFilaASimbolos(palabra, "Int", );                         //Regístralo.
           
 //          ListaEnlazada temp = (ListaEnlazada) simbolos.get(0).getInfo();       //Para obtener la longitud de la lista y con ello el valor de id
-          añadeFilaASimbolos(palabra, "Int", String.valueOf(500 + numero_id), "--", false);
-          añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),String.valueOf(500 + numero_id));
+          añadeFilaASimbolos(palabra, "Int", String.valueOf(500 + numero_id), 
+                             String.valueOf(linea), false);
+          añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),
+                          String.valueOf(500 + numero_id));
           return "id";
         }
       case 5:
@@ -201,7 +212,7 @@ public class AnalizadorLexico {
           }
         } else {                                       //Termina el número entero
           if(esEspacio(programa.charAt(inicio))){
-            añadeFilaASimbolos(palabra, "Int", palabra, "--", true);
+            añadeFilaASimbolos(palabra, "Int", palabra, String.valueOf(linea), true);
             añadeFilaATokens(palabra, "Número", "Int", palabra);
             return "intliteral";
           }else if(esMayuscula(programa.charAt(inicio)) || 
@@ -211,7 +222,7 @@ public class AnalizadorLexico {
             error = true;
             break;
           } else{
-            añadeFilaASimbolos(palabra, "Int", palabra, "--", true);
+            añadeFilaASimbolos(palabra, "Int", palabra, String.valueOf(linea), true);
             añadeFilaATokens(palabra, "Número", "Int", palabra);
             return "intliteral";
           }
@@ -223,7 +234,7 @@ public class AnalizadorLexico {
           estado = 6;
           break;
         } else {                                      //Termina el número float
-          añadeFilaASimbolos(palabra, "Real", palabra, "--", true);
+          añadeFilaASimbolos(palabra, "Float", palabra, String.valueOf(linea), true);
           añadeFilaATokens(palabra, "Número", "Float", "500");
           return "realliteral";
         }
@@ -236,11 +247,18 @@ public class AnalizadorLexico {
     ListaEnlazada temp = new ListaEnlazada();
     
     temp = (ListaEnlazada) simbolos.get(0).getInfo();
-    if (simboloRegistrado(lexema)){
-      int i = temp.indexOf(lexema);
-      temp = (ListaEnlazada) simbolos.get(3).getInfo();
+    if (simboloRegistrado(lexema)){                                             //Si el símbolo ya está registrado
+      //Aumentar el número de repeticiones en 1:
+      int i = temp.indexOf(lexema);                                             //Indice de la fila donde está el símbolo
+      temp = (ListaEnlazada) simbolos.get(3).getInfo();                         //Columna de repeticiones
       int v = 1 + Integer.parseInt((String) temp.get(i).getInfo());
       temp.get(i).setInfo(String.valueOf(v));
+      
+      //Aumentar el número de líneas donde aparece:
+      temp = (ListaEnlazada) simbolos.get(4).getInfo();                         //Columna de línea del código donde aparece
+      String l = String.valueOf(temp.get(i).getInfo()) + ", "+  String.valueOf(linea);
+      temp.get(i).setInfo(String.valueOf(l));
+      
     } else {
       temp.add(new Nodo(lexema));
             

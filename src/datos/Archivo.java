@@ -52,7 +52,7 @@ public class Archivo {
       br = new BufferedReader(fr);
 
       while ((linea=br.readLine())!=null) {
-        cadena = cadena + linea + " ";
+        cadena = cadena + linea + " & ";
       }
       }catch (IOException e) {
         e.printStackTrace();
