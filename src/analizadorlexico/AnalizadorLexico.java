@@ -186,10 +186,10 @@ public class AnalizadorLexico {
 //          añadeFilaASimbolos(palabra, "Int", );                         //Regístralo.
           
 //          ListaEnlazada temp = (ListaEnlazada) simbolos.get(0).getInfo();       //Para obtener la longitud de la lista y con ello el valor de id
-          añadeFilaASimbolos(palabra, "Int", String.valueOf(500 + numero_id), 
-                             String.valueOf(linea), false);
           añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),
                           String.valueOf(500 + numero_id));
+          añadeFilaASimbolos(palabra, "Int", String.valueOf(500 + numero_id), 
+                             String.valueOf(linea), false);
           return "id";
         }
       case 5:

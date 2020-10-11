@@ -1,6 +1,7 @@
 package analizadorsemantico;
 
 import analizadorlexico.AnalizadorLexico;
+import datos.EscribeEnArchivo;
 import estructurasDeDatos.ListaEnlazada;
 import estructurasDeDatos.Nodo;
 import java.io.EOFException;
@@ -11,6 +12,7 @@ public class GeneradorArbol {
   ListaEnlazada simbolos;
   //Lista de las listas generadas por cada expresión que encuentre:
   ListaEnlazada arboles;
+  EscribeEnArchivo archivo;
   
   
   //Recibe la cadena de programa formateada con '&' en cada salto de línea
@@ -19,14 +21,17 @@ public class GeneradorArbol {
     this.simbolos = simbolos;
     this.tablaDeTokens = tablaDeTokens;
     arboles = new ListaEnlazada();
+    archivo = new EscribeEnArchivo();
     
     for (int i = 0; i < 6; i++)
       arboles.add(new Nodo(new ListaEnlazada()));
+    
+    archivo.crearArchivo();
   }
   
   public void generaArboles(){
     String linea;
-    String expresion;
+    String tipoExpresion;
     
     for (int i = 0; i < programa.length; i++) {                                 //Para cada línea del programa
       linea = programa[i];
@@ -34,17 +39,18 @@ public class GeneradorArbol {
       if(linea.contains(":=")){                                                 //Si encuentra una asignación
         String operaciones = linea.split(":=")[1];                              //Sacamos las parte derecha de la asignación
         
-        evaluaExpresion(operaciones);
+        tipoExpresion = evaluaExpresion(operaciones);
+        cambiaTipoEnSimbolos(linea.split(":=")[0].replaceAll("\\s", ""), tipoExpresion);
+        printRegistro(getIndexSimbolo(linea.split(":=")[0].replaceAll("\\s", "")));
       }
     }
   }
   
-  private void evaluaExpresion(String expresion){
+  private String evaluaExpresion(String expresion){
     AnalizadorLexico tokenizer = new AnalizadorLexico(expresion);
     ListaEnlazada lexemasEnExpresion = new ListaEnlazada();
     String[] tiposEnExpresion;
     String resultado = "";
-    
     //Extraer los lexemas de la expresion:
     try{
       while (true){
@@ -71,8 +77,8 @@ public class GeneradorArbol {
       for (int i = 2; i < tiposEnExpresion.length; i++) 
         resultado = tipoResultante(resultado, tiposEnExpresion[i]);
     }
-    
     imprimeArbol(lexemasEnExpresion, resultado);
+    return resultado;
   }
   
   private void imprimeArbol(ListaEnlazada listaDeTokens, String resultado){
@@ -84,6 +90,7 @@ public class GeneradorArbol {
       printRegistro(getIndexSimbolo((String) listaDeTokens.get(i).getInfo()));
     
     System.out.printf("%-20s%-20s\n", "Expresión", resultado);
+    archivo.escribeLinea("Expresion; "+resultado);
     
     System.out.println("\n");
   }
@@ -153,6 +160,18 @@ public class GeneradorArbol {
     
     System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s\n", nombre, tipo, id, 
                        repeticiones, linea, atributo);
+    archivo.escribeLinea(nombre + "; " + tipo + "; " + id + "; " + repeticiones + "; " + linea + "; " + atributo);
+  }
+  
+  private void cambiaTipoEnSimbolos(String lexema, String tipo) {
+    ListaEnlazada temp = new ListaEnlazada();
+    
+    temp = (ListaEnlazada) simbolos.get(0).getInfo();
+    if (temp.exist(new Nodo(lexema))){
+      int i = temp.indexOf(lexema);
+      temp = (ListaEnlazada) simbolos.get(1).getInfo();
+      temp.get(i).setInfo(String.valueOf(tipo));
+    }
   }
   
 }
