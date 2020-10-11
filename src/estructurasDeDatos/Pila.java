@@ -6,9 +6,11 @@ package estructurasDeDatos;
  */
 public class Pila{
     private Nodo tope, fondo;
+    private int lenght;
     
     public Pila(){
       tope = fondo = null;
+      lenght = 0;
     }
     
     public void push(Nodo n){
@@ -18,8 +20,10 @@ public class Pila{
         temp = tope;
         tope = n;
         tope.setSiguiente(temp);
+        lenght++;
       } else {
         tope = fondo = n;
+        lenght++;
       }
     }
     
@@ -38,9 +42,29 @@ public class Pila{
       }
     }
     
+    public Nodo popElemento(){
+      Nodo temp = null;
+      
+      if(!esVacia()){
+        if(tope == fondo){
+          temp = tope;
+          tope = null;
+          fondo = null;
+          lenght--;
+        } else {
+          temp = tope;
+          tope = temp.getSiguiente();
+          temp.setSiguiente(null);
+          lenght--;
+        }
+      }
+      return temp;
+    }
+    
     public void cicloPush(String[] a){
 //      for(String info : a)
 //        push(new Nodo(info));
+      lenght = a.length;
       for(int i = a.length-1; i>=0; i--)
         if(a[i] != " " && a[i].length() > 0)
           push(new Nodo(a[i]));
@@ -69,4 +93,9 @@ public class Pila{
     public Nodo getFondo(){
       return fondo;
     }
+    
+    public int lenght(){
+      return lenght;
+    }
+    
 }

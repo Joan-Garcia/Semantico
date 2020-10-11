@@ -1,6 +1,7 @@
 package lexicosintactico;
 
 import analizadorlexico.AnalizadorLexico;
+import analizadorsemantico.GeneradorArbol;
 import datos.Archivo;
 import datos.Gramatica;
 import estructurasDeDatos.ListaEnlazada;
@@ -9,9 +10,11 @@ import estructurasDeDatos.Pila;
 public class Main {
   Gramatica gramatica;
   AnalizadorLexico analizadorLexico;
+  GeneradorArbol arboles;
   Pila pila;
   LexicoSintactico analizadorLexicoSintactico;
   ListaEnlazada temp;
+  String programa;
   
   public Main(){
     gramatica = new Gramatica(new Archivo());
@@ -23,6 +26,8 @@ public class Main {
                                                       analizadorLexico);
     
     analizadorLexicoSintactico.LlDriver();
+    arboles = new GeneradorArbol(programa, analizadorLexico.getTablaSimbolos(), 
+                                 analizadorLexico.getTablaTokens());
   }
   
   private void captura(){
@@ -30,7 +35,8 @@ public class Main {
     gramatica.prepararGramatica();
     
     System.out.println("Selecciona archivo de programa");
-    analizadorLexico = new AnalizadorLexico(new Archivo().leerArchivo());
+    programa = new Archivo().leerArchivo();
+    analizadorLexico = new AnalizadorLexico(programa);
   }
   
   private void resultados(){
@@ -74,6 +80,8 @@ public class Main {
     for (int i = 0; i < t1.length; i++)
       System.out.printf("%-20s%-30s%-40s%-20s%-20s\n", t1[i], t2[i], t3[i], t4[i], t5[i]);
     System.out.println("");
+    
+    arboles.generaArboles();
   }
   
   public static void main(String[] args) {

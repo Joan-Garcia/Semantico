@@ -55,9 +55,7 @@ public class AnalizadorLexico {
     boolean error  = false;
     palabra = "";
     estado = 0;
-    
-    System.out.println(programa);
-    
+   
     if(inicio == programa.length())
       throw new EOFException();
     else
