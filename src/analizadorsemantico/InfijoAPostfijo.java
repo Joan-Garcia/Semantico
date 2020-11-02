@@ -25,7 +25,7 @@ class InfijoAPostfijo {
         }
     }
     
-    static String infixToPostfix(final String exp) {
+    public static String infixToPostfix(final String exp) {
         String result = "";
         String tempresult = "";       //Para guardar números de varios dígitos
         final Stack<Character> stack = new Stack<Character>();
@@ -88,7 +88,7 @@ class InfijoAPostfijo {
     }
     
     public static void main(final String[] args) {
-        final String exp = "121+5*(Cuenta+12)";
+        final String exp = "3+12 ";
         System.out.println(infixToPostfix(exp));
         toStack(exp).mostrarPila();
     }

@@ -1,6 +1,7 @@
 package lexicosintactico;
 
 import analizadorlexico.AnalizadorLexico;
+import analizadorsemantico.ConvertidorDeExp;
 import analizadorsemantico.GeneradorArbol;
 import datos.Archivo;
 import datos.Gramatica;
@@ -11,6 +12,7 @@ public class Main {
   Gramatica gramatica;
   AnalizadorLexico analizadorLexico;
   GeneradorArbol arboles;
+  ConvertidorDeExp infijoAPostfijo;
   Pila pila;
   LexicoSintactico analizadorLexicoSintactico;
   ListaEnlazada temp;
@@ -28,6 +30,8 @@ public class Main {
     analizadorLexicoSintactico.LlDriver();
     arboles = new GeneradorArbol(programa, analizadorLexico.getTablaSimbolos(), 
                                  analizadorLexico.getTablaTokens());
+    
+    infijoAPostfijo = new ConvertidorDeExp(programa);
   }
   
   private void captura(){
@@ -82,6 +86,16 @@ public class Main {
     System.out.println("");
     
     arboles.generaArboles();
+    
+    System.out.println("\nConversión de Infijo a Postfijo");
+    infijoAPostfijo.convierteExpresiones();
+    
+    // Se muestran las pilas para comprobar que se guradaron correctamente
+    ListaEnlazada test = infijoAPostfijo.getExpPostfijas();
+    for (int i = 0; i < test.size(); i++){
+      Pila p = (Pila) test.get(i).getInfo();
+      p.mostrarPila();
+    }
   }
   
   public static void main(String[] args) {
@@ -93,6 +107,7 @@ public class Main {
       m.resultados();
     }catch(Exception e){
       System.out.println(">>>Analisis terminado por error.");
+      e.printStackTrace();
     }
   }
 }
