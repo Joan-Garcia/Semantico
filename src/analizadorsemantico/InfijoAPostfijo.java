@@ -33,9 +33,9 @@ class InfijoAPostfijo {
         
         for (int i = 0; i < exp.length(); ++i) {
             final char c = exp.charAt(i);
-            if (Character.isLetterOrDigit(c)) { //Guardar los números hasta que no encuentre
+            if (Character.isLetterOrDigit(c) || c == '.') { //Guardar los números hasta que no encuentre
                 tempresult += c;
-                if(!Character.isLetterOrDigit(exp.charAt(i + 1))){
+                if(!Character.isLetterOrDigit(exp.charAt(i + 1)) && exp.charAt(i + 1) != '.'){
                     result += tempresult + " ";
                     tempresult = "";
                 }
@@ -88,7 +88,7 @@ class InfijoAPostfijo {
     }
     
     public static void main(final String[] args) {
-        final String exp = "3+12 ";
+        final String exp = "3+12.5 ";
         System.out.println(infixToPostfix(exp));
         toStack(exp).mostrarPila();
     }
