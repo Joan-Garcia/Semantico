@@ -4,6 +4,7 @@ package analizadorsemantico;
 import estructurasDeDatos.ListaEnlazada;
 import analizadorsemantico.InfijoAPostfijo;
 import estructurasDeDatos.Nodo;
+import estructurasDeDatos.Pila;
 
 public class ConvertidorDeExp {
   String programa[];
@@ -23,12 +24,13 @@ public class ConvertidorDeExp {
     
       if(linea.contains(":=")){                                                 //Si encuentra una asignación
         String operaciones = linea.split(":=")[1];                              //Sacamos las parte derecha de la asignación
-        
+        String var = linea.split(":=")[0].replaceAll("\\s", "");
+
         // Prints de prueba. paa ver el funcionamiento
         System.out.println(operaciones.replaceAll("\\s", "").replace(";", "") + " ");
         System.out.println(InfijoAPostfijo.infixToPostfix(operaciones.replaceAll("\\s", "").replace(";", "") + " "));
         
-        expPostfijas.add(new Nodo(InfijoAPostfijo.toStack(operaciones.replaceAll("\\s", "").replace(";", "") + " ")));
+        expPostfijas.add(new Nodo(InfijoAPostfijo.toStack(operaciones.replaceAll("\\s", "").replace(";", "") + " ", var)));
       }
     }
   }
