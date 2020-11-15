@@ -3,6 +3,7 @@ package lexicosintactico;
 import analizadorlexico.AnalizadorLexico;
 import analizadorsemantico.ConvertidorDeExp;
 import analizadorsemantico.GeneradorArbol;
+import analizadorsemantico.GeneradorCuartetos;
 import datos.Archivo;
 import datos.Gramatica;
 import estructurasDeDatos.ListaEnlazada;
@@ -13,6 +14,7 @@ public class Main {
   AnalizadorLexico analizadorLexico;
   GeneradorArbol arboles;
   ConvertidorDeExp infijoAPostfijo;
+  GeneradorCuartetos generadorDeCuartetos;
   Pila pila;
   LexicoSintactico analizadorLexicoSintactico;
   ListaEnlazada temp;
@@ -96,6 +98,10 @@ public class Main {
       Pila p = (Pila) test.get(i).getInfo();
       p.mostrarPila();
     }
+    
+    System.out.println("\nGeneración de código intermedio");
+    generadorDeCuartetos = new GeneradorCuartetos(infijoAPostfijo.getExpPostfijas());
+    generadorDeCuartetos.mostrarCuarteto();
   }
   
   public static void main(String[] args) {
