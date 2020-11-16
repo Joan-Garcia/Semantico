@@ -1,5 +1,6 @@
 package analizadorsemantico;
 
+import datos.EscribeEnArchivo;
 import estructurasDeDatos.ListaEnlazada;
 import estructurasDeDatos.Nodo;
 import estructurasDeDatos.Pila;
@@ -9,6 +10,7 @@ public class GeneradorCuartetos {
   private final String [][] cuarteto;
   //Lista que guardará la expresión en postfijo a evaluar
   private final ListaEnlazada operandos;
+  EscribeEnArchivo archivo;
   
   //Recibe la lista enlazada de pilas que resulta de ConvertidorDeExp.java al 
   //terminar de analizar el programa.
@@ -22,6 +24,8 @@ public class GeneradorCuartetos {
       while(!p.esVacia())                                                       //  Para cada elemento de la pila
         operandos.add(new Nodo(p.popElemento().getInfo()));                     //    Mételo en la lista de operandos
     }
+    archivo = new EscribeEnArchivo();
+    archivo.crearArchivo("Cuartetos");
   }
   
   //Genera los cuartetos a partir de los operandos.
@@ -88,18 +92,20 @@ public class GeneradorCuartetos {
     
   public void mostrarCuarteto() {
     GeneraCuartetos();
-    
-    System.out.println("EJEMPLO DE CUARTETOS");
+    String line = "";
     System.out.println("OPERADOR\tOPERANDO1\tOPERANDO2\tRESULTADO");
     for(int i=0,linea=0; i<cuarteto.length;i++){
       for(int j=0; j<cuarteto[i].length;j++){
-        if(cuarteto[i][j]!="")
+        if(cuarteto[i][j]!="" && cuarteto[i][j] != null){
           System.out.print(cuarteto[i][j]+"\t\t");
-        else
+          line = line + cuarteto[i][j] + " ";
+        }else
           break;
         linea++;
         if(linea==4){
           System.out.println("");
+          archivo.escribeLinea("Cuartetos", line);
+          line = "";
           linea=0;
         }
       }

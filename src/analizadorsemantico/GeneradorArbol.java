@@ -26,7 +26,7 @@ public class GeneradorArbol {
     for (int i = 0; i < 6; i++)
       arboles.add(new Nodo(new ListaEnlazada()));
     
-    archivo.crearArchivo();
+    archivo.crearArchivo("Arbol");
   }
   
   public void generaArboles(){
@@ -90,7 +90,7 @@ public class GeneradorArbol {
       printRegistro(getIndexSimbolo((String) listaDeTokens.get(i).getInfo()));
     
     System.out.printf("%-20s%-20s\n", "Expresión", resultado);
-    archivo.escribeLinea("Expresion; "+resultado);
+    archivo.escribeLinea("Arbol", "Expresion; "+resultado);
     
     System.out.println("\n");
   }
@@ -160,7 +160,7 @@ public class GeneradorArbol {
     
     System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s\n", nombre, tipo, id, 
                        repeticiones, linea, atributo);
-    archivo.escribeLinea(nombre + "; " + tipo + "; " + id + "; " + repeticiones + "; " + linea + "; " + atributo);
+    archivo.escribeLinea("Arbol", nombre + "; " + tipo + "; " + id + "; " + repeticiones + "; " + linea + "; " + atributo);
   }
   
   private void cambiaTipoEnSimbolos(String lexema, String tipo) {

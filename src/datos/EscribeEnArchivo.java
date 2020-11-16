@@ -8,8 +8,8 @@ public class EscribeEnArchivo {
   File f;
   FileWriter writer;
   
-  public void crearArchivo(){
-    f = new File("src/salidas/Arbol.txt");
+  public void crearArchivo(String name){
+    f = new File("src/salidas/"+name+".txt");
     try {
       if (f.exists()){
         f.delete();
@@ -21,9 +21,9 @@ public class EscribeEnArchivo {
     }
   }
   
-  public void escribeLinea(String linea){
+  public void escribeLinea(String file, String linea){
       try {          
-        f = new File("src/salidas/Arbol.txt");
+        f = new File("src/salidas/"+file+".txt");
         writer = new FileWriter(f, true);
         writer.write(linea + "\r\n");
         writer.close();

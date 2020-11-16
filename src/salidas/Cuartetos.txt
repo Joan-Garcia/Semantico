@@ -1,0 +1,4 @@
++ Cuenta 12.01 temp1 
+= temp1 - Num 
++ Num 12 temp2 
+= temp2 - Var_1 
