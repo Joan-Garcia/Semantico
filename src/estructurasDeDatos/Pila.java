@@ -1,5 +1,4 @@
 package estructurasDeDatos;
-
 /**
  * Pila de nodos que almacenan como información < String >
  * 
@@ -7,15 +6,12 @@ package estructurasDeDatos;
 public class Pila{
     private Nodo tope, fondo;
     private int lenght;
-    
     public Pila(){
       tope = fondo = null;
       lenght = 0;
     }
-    
     public void push(Nodo n){
       Nodo temp;
-      
       if(!esVacia()){
         temp = tope;
         tope = n;
@@ -26,10 +22,8 @@ public class Pila{
         lenght++;
       }
     }
-    
     public void pop(){
       Nodo temp;
-      
       if(!esVacia()){
         if(tope == fondo){
           tope = null;
@@ -41,10 +35,8 @@ public class Pila{
         }
       }
     }
-    
     public Nodo popElemento(){
       Nodo temp = null;
-      
       if(!esVacia()){
         if(tope == fondo){
           temp = tope;
@@ -60,7 +52,6 @@ public class Pila{
       }
       return temp;
     }
-    
     public void cicloPush(String[] a){
 //      for(String info : a)
 //        push(new Nodo(info));
@@ -69,7 +60,6 @@ public class Pila{
         if(a[i] != " " && a[i].length() > 0)
           push(new Nodo(a[i]));
     }
-    
     public void mostrarPila(){
       if(!esVacia()){
         if(tope == fondo){
@@ -81,21 +71,16 @@ public class Pila{
         }
       }
     }
-    
     public boolean esVacia(){
       return tope == null && fondo == null;
     }
-    
     public Nodo getTope(){
       return tope;
     }
-    
     public Nodo getFondo(){
       return fondo;
     }
-    
     public int lenght(){
       return lenght;
     }
-    
 }

@@ -1,11 +1,8 @@
 package analizadorsemantico;
-
 import estructurasDeDatos.Nodo;
 import estructurasDeDatos.Pila;
 import java.util.Stack;
-
 class InfijoAPostfijo {
-    
     static int Prec(final char ch) {
         switch (ch) {
             case '+':
@@ -24,7 +21,6 @@ class InfijoAPostfijo {
             }
         }
     }
-    
     public static String infixToPostfix(final String exp) {
         String result = "";
         String tempresult = "";       //Para guardar números de varios dígitos
@@ -65,28 +61,20 @@ class InfijoAPostfijo {
         }
         return result;
     }
-    
     public static Pila toStack(final String exp, final String variable) {
         final String result = infixToPostfix(exp);
         final Pila temp = new Pila();
-        
         temp.push(new Nodo(variable));
         temp.push(new Nodo("="));
-        
         final String[] arrayExpresiones = result.split(" ");
-        
 //        for (String expresion : arrayExpresiones)
 //            temp.push(new Nodo(expresion));
-        
         /*Si el orden de entrada a la pila es inverso:
         */
-        
         for (int i = arrayExpresiones.length; i > 0 ;i--)
             temp.push(new Nodo(arrayExpresiones[i-1]));
-        
         return temp;
     }
-    
     public static void main(final String[] args) {
         final String exp = "3+12.5 ";
         System.out.println(infixToPostfix(exp));

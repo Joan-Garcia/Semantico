@@ -1,23 +1,19 @@
 package analizadorsemantico;
-
 import datos.EscribeEnArchivo;
 import estructurasDeDatos.ListaEnlazada;
 import estructurasDeDatos.Nodo;
 import estructurasDeDatos.Pila;
-
 public class GeneradorCuartetos {
   //Arreglo que guardará los cuartetos generados
   private final String [][] cuarteto;
   //Lista que guardará la expresión en postfijo a evaluar
   private final ListaEnlazada operandos;
   EscribeEnArchivo archivo;
-  
   //Recibe la lista enlazada de pilas que resulta de ConvertidorDeExp.java al 
   //terminar de analizar el programa.
   public GeneradorCuartetos(ListaEnlazada expEnPostfix){
     cuarteto = new String[20][4];
     operandos = new ListaEnlazada();
-    
     //Tenemos que pasar las pilas de la lista enlazada al arreglo *operandos*
     for (int i = 0; i < expEnPostfix.size(); i++) {                             //Para cada pila en la lista
       Pila p = (Pila) expEnPostfix.get(i).getInfo();                            //  Tomar la pila
@@ -27,7 +23,6 @@ public class GeneradorCuartetos {
     archivo = new EscribeEnArchivo();
     archivo.crearArchivo("Cuartetos");
   }
-  
   //Genera los cuartetos a partir de los operandos.
   private void GeneraCuartetos(){
     int o1=0;  //índice del arreglo cuartetos
@@ -37,7 +32,6 @@ public class GeneradorCuartetos {
     int temporal=1; //contador de las variables temporales
     int bandera=0;  //bandera para los operandos, si bandera=0 el valor del operando se escribirá en operando1
                     // en caso contrario el operando se escribirá en operando2
-        
     for(int i=0; i<longoper2; i++){
       switch((String) operandos.get(i).getInfo()){
         case "+": 
@@ -89,7 +83,6 @@ public class GeneradorCuartetos {
       }
     }
   }
-    
   public void mostrarCuarteto() {
     GeneraCuartetos();
     String line = "";

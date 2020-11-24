@@ -1,9 +1,7 @@
 package analizadorlexico;
-
 import estructurasDeDatos.ListaEnlazada;
 import estructurasDeDatos.Nodo;
 import java.io.EOFException;
-
 public class AnalizadorLexico {
   private final String[][] listaPalabrasReservadas;
   private final ListaEnlazada simbolos, tokens;
@@ -21,7 +19,6 @@ public class AnalizadorLexico {
                                                 {"*",        "Operación Multiplicación"},
                                                 {"(",        "Parentesis que abre"},
                                                 {")",        "Parentesis que cierra"}};
-  
   public AnalizadorLexico(String programa){
     listaPalabrasReservadas = new String[4][2];
     simbolos = new ListaEnlazada();
@@ -31,31 +28,25 @@ public class AnalizadorLexico {
     listaPalabrasReservadas[1][0] = "programa";
     listaPalabrasReservadas[2][0] = "begin";
     listaPalabrasReservadas[3][0] = "end";
-    
     listaPalabrasReservadas[0][1] = "token";
     listaPalabrasReservadas[1][1] = "400";
     listaPalabrasReservadas[2][1] = "401";
     listaPalabrasReservadas[3][1] = "402";
-    
     for (int i = 0; i < 6; i++)
       simbolos.add(new Nodo(new ListaEnlazada()));
-    
     this.programa = programa;
     this.inicio = 0;
     this.numero_id = 0;
     this.linea = 1;
-    
     for (int i = 0; i < 5; i++) 
       tokens.add(new Nodo(new ListaEnlazada()));
   }
-  
   public String getToken() throws EOFException{
     String palabra;
     int estado;
     boolean error  = false;
     palabra = "";
     estado = 0;
-   
     if(inicio == programa.length())
       throw new EOFException();
     else
@@ -140,7 +131,6 @@ public class AnalizadorLexico {
             inicio++;
             palabra += programa.charAt(inicio);
             inicio++;
-            
             return palabra;
           } else {
             añadeFilaATokens(String.valueOf(programa.charAt(inicio)), 
@@ -184,7 +174,6 @@ public class AnalizadorLexico {
           //  Añade a la tabla de símbolos.
 //          if(!simboloRegistrado(palabra))                                       //Si no está registrado el identificador.
 //          añadeFilaASimbolos(palabra, "Int", );                         //Regístralo.
-          
 //          ListaEnlazada temp = (ListaEnlazada) simbolos.get(0).getInfo();       //Para obtener la longitud de la lista y con ello el valor de id
           añadeFilaATokens(palabra, "Identificador", getTipoToken("id"),
                           String.valueOf(500 + numero_id));
@@ -239,11 +228,9 @@ public class AnalizadorLexico {
     }
     throw new EOFException();
   }
-  
   private void añadeFilaASimbolos(String lexema, String tipo, String id,
                                   String linea, boolean numero){
     ListaEnlazada temp = new ListaEnlazada();
-    
     temp = (ListaEnlazada) simbolos.get(0).getInfo();
     if (simboloRegistrado(lexema)){                                             //Si el símbolo ya está registrado
       //Aumentar el número de repeticiones en 1:
@@ -251,27 +238,20 @@ public class AnalizadorLexico {
       temp = (ListaEnlazada) simbolos.get(3).getInfo();                         //Columna de repeticiones
       int v = 1 + Integer.parseInt((String) temp.get(i).getInfo());
       temp.get(i).setInfo(String.valueOf(v));
-      
       //Aumentar el número de líneas donde aparece:
       temp = (ListaEnlazada) simbolos.get(4).getInfo();                         //Columna de línea del código donde aparece
       String l = String.valueOf(temp.get(i).getInfo()) + ", "+  String.valueOf(linea);
       temp.get(i).setInfo(String.valueOf(l));
-      
     } else {
       temp.add(new Nodo(lexema));
-            
       temp = (ListaEnlazada) simbolos.get(1).getInfo();
       temp.add(new Nodo(tipo));
-    
       temp = (ListaEnlazada) simbolos.get(2).getInfo();
       temp.add(new Nodo(id));
-    
       temp = (ListaEnlazada) simbolos.get(3).getInfo();
       temp.add(new Nodo("1"));
-    
       temp = (ListaEnlazada) simbolos.get(4).getInfo();
       temp.add(new Nodo(linea));
-      
       if (!numero) {
         numero_id++;
         temp = (ListaEnlazada) simbolos.get(5).getInfo();
@@ -282,48 +262,37 @@ public class AnalizadorLexico {
       }
     }
   }
-  
   // Comprueba si un símbolo ya existe en la tabla de símbolos.
   private boolean simboloRegistrado(String lexema){
     ListaEnlazada temp = new ListaEnlazada();
-            
     temp = (ListaEnlazada) simbolos.get(0).getInfo();
     return temp.exist(new Nodo(lexema));
   }
-  
   private boolean esPunto(char c){
     return c == '.';
   }
-  
   private boolean esSimbolo(char c){
     return c == ';' || c == '=' || c == '+' || c == '-' || c == '*' || 
            c == '(' || c == ')' || c == ':'; 
   }
-  
   private boolean esMinuscula(char c){
     return Character.isLowerCase(c);
   }
-  
   private boolean esMayuscula(char c){
     return Character.isUpperCase(c);
   }
-  
   private boolean esEspacio(char c){
     return Character.isWhitespace(c);
   }
-  
   private boolean esGuionBajo(char c){
     return new Character(c).equals('_');
   }
-  
   private boolean esNumero(char c){
     return Character.isDigit(c);
   }
-  
   private int valorASCII(char c){
     return (int) c;
   }
-  
   // Comprueba si una palabra forma parte de las palabras reservadas.
   public boolean esPalabraReservada(String palabra){
     for (int i = 0; i <= 3; i++)
@@ -331,15 +300,12 @@ public class AnalizadorLexico {
         return true;
     return false;
   }
-  
   public ListaEnlazada getTablaSimbolos(){
     return simbolos;
   }
-  
   public String[][] getListaPalabrasReservadas(){
     return listaPalabrasReservadas;
   }
-  
   // Devuelve el token correspondiente a la palabra reservada.
   private int tokenPalabraReservada(String palabra){
     for (int i = 0; i <= 3; i++)
@@ -347,11 +313,9 @@ public class AnalizadorLexico {
         return Integer.parseInt(listaPalabrasReservadas[i][1]);
     return -1;
   }
-  
   private void añadeFilaATokens(String lexema, String token, String tipo,
                                 String atributo){
     ListaEnlazada temp = new ListaEnlazada();
-    
     temp = (ListaEnlazada) tokens.get(0).getInfo();
     if (temp.exist(new Nodo<String>(lexema))){
       int i = temp.indexOf(lexema);
@@ -360,32 +324,25 @@ public class AnalizadorLexico {
       temp.get(i).setInfo(String.valueOf(v));
     } else {
     temp.add(new Nodo(lexema));
-            
     temp = (ListaEnlazada) tokens.get(1).getInfo();
     temp.add(new Nodo(token));
-    
     temp = (ListaEnlazada) tokens.get(2).getInfo();
     temp.add(new Nodo(tipo));
-    
     temp = (ListaEnlazada) tokens.get(3).getInfo();
     temp.add(new Nodo(atributo));
-    
     temp = (ListaEnlazada) tokens.get(4).getInfo();
     temp.add(new Nodo("1"));
     }
   }
-  
   public ListaEnlazada getTablaTokens(){
     return tokens;
   }
-  
   private String getTipoToken(String lexema) {
     for (int i = 0; i < 11; i++)
       if (tipoToken[i][0].equals(lexema))
         return tipoToken[i][1];
     return "x";
   }
-  
   private boolean lexemaRepetido(String lexema) {
     ListaEnlazada temp = new ListaEnlazada();
     temp = (ListaEnlazada) tokens.get(0).getInfo();
