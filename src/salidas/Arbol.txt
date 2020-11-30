@@ -1,8 +1,24 @@
-Cuenta; Int; 501; 1; 3; 0
-12.01; Float; 12.01; 1; 3; 12.01
-Expresion; Float
-Num; Float; 500; 2; 3, 4; 0
-Num; Float; 500; 2; 3, 4; 0
-12; Int; 12; 1; 4; 12
+1356; Int; 1356; 1; 3; 1356
+15; Int; 15; 1; 3; 15
 Expresion; Int
-Var_1; Int; 502; 1; 4; 0
+Cuenta; Int; 500; 3; 3, 5, 6; 0
+75; Int; 75; 1; 4; 75
+5; Int; 5; 2; 4, 5; 5
+Expresion; Int
+Valor; Int; 501; 2; 4, 8; 0
+45; Int; 45; 1; 5; 45
+5; Int; 5; 2; 4, 5; 5
+Expresion; Int
+Cuenta; Int; 500; 3; 3, 5, 6; 0
+121; Int; 121; 1; 6; 121
+Cuenta; Int; 500; 3; 3, 5, 6; 0
+Expresion; Int
+Num; Int; 502; 3; 6, 7, 8; 0
+Num; Int; 502; 3; 6, 7, 8; 0
+12; Int; 12; 1; 7; 12
+Expresion; Int
+Var_1; Int; 503; 2; 7, 8; 0
+Num; Int; 502; 3; 6, 7, 8; 0
+Var_1; Int; 503; 2; 7, 8; 0
+Expresion; Int
+Valor; Int; 501; 2; 4, 8; 0
