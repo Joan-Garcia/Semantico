@@ -72,7 +72,7 @@ public class GeneradorCuartetos {
             }
           }else{    // si ya se encontró un signo "="
             if(bandera==1){  //si es el operando2
-              cuarteto[o1][2]="-";
+              cuarteto[o1][2]="_";
               cuarteto[o1][3]=(String) operandos.get(i).getInfo();
               bandera=0;
               resuelve=0;

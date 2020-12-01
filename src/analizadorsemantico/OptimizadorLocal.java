@@ -37,10 +37,44 @@
  */
 package analizadorsemantico;
 
-/**
- *
- * @author Miguel
- */
+import estructurasDeDatos.ListaEnlazada;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class OptimizadorLocal {
+  File archivo;
+  Scanner sc;
+  ArrayList<String> lineas;
+  ListaEnlazada tablaSimbolos;
+  public OptimizadorLocal(ListaEnlazada tablaSimbolos){
+    lineas = new ArrayList<String>();
+    this.tablaSimbolos = tablaSimbolos;
+  }
   
+  public void openFile(){
+    try{
+      archivo = new File("src/salidas/Cuartetos.txt");
+      sc = new Scanner(archivo);
+      while(sc.hasNext())
+        lineas.add(sc.nextLine());
+    }catch(FileNotFoundException e){
+      System.out.println(">>>Error abriendo archivo Cuartetos.txt");
+    }
+  }
+  public void optimiza(){
+    //int[] contador = new int[lineas.size()];
+    for(int i = 0; i < lineas.size(); i++){
+      if(lineas.get(i).charAt(0) == '='){
+        
+      }
+    }
+  }
+  
+//  public static void main(String[] args) {
+//    OptimizadorLocal ol = new OptimizadorLocal();
+//    ol.openFile();
+//    ol.optimiza();
+//  }
 }

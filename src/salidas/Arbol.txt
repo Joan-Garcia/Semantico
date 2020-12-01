@@ -1,24 +1,20 @@
 1356; Int; 1356; 1; 3; 1356
 15; Int; 15; 1; 3; 15
 Expresion; Int
-Cuenta; Int; 500; 3; 3, 5, 6; 0
-75; Int; 75; 1; 4; 75
-5; Int; 5; 2; 4, 5; 5
+Cuenta; Int; 500; 3; 3, 4, 5; 0
+45; Int; 45; 1; 4; 45
+5; Int; 5; 1; 4; 5
 Expresion; Int
-Valor; Int; 501; 2; 4, 8; 0
-45; Int; 45; 1; 5; 45
-5; Int; 5; 2; 4, 5; 5
+Cuenta; Int; 500; 3; 3, 4, 5; 0
+121; Int; 121; 1; 5; 121
+Cuenta; Int; 500; 3; 3, 4, 5; 0
 Expresion; Int
-Cuenta; Int; 500; 3; 3, 5, 6; 0
-121; Int; 121; 1; 6; 121
-Cuenta; Int; 500; 3; 3, 5, 6; 0
+Num; Int; 501; 3; 5, 6, 7; 0
+Num; Int; 501; 3; 5, 6, 7; 0
+12; Int; 12; 1; 6; 12
 Expresion; Int
-Num; Int; 502; 3; 6, 7, 8; 0
-Num; Int; 502; 3; 6, 7, 8; 0
-12; Int; 12; 1; 7; 12
+Var_1; Int; 502; 2; 6, 7; 0
+Num; Int; 501; 3; 5, 6, 7; 0
+Var_1; Int; 502; 2; 6, 7; 0
 Expresion; Int
-Var_1; Int; 503; 2; 7, 8; 0
-Num; Int; 502; 3; 6, 7, 8; 0
-Var_1; Int; 503; 2; 7, 8; 0
-Expresion; Int
-Valor; Int; 501; 2; 4, 8; 0
+Valor; Int; 503; 1; 7; 0
