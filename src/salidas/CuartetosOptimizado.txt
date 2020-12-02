@@ -1,7 +1,3 @@
-+ 1356 15 temp1 
-= temp1 _ Cuenta 
-- 75 5 temp2 
-= temp2 _ Valor 
 * 45 5 temp3 
 = temp3 _ Cuenta 
 * 121 Cuenta temp4 

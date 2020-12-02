@@ -3,6 +3,7 @@ import analizadorlexico.AnalizadorLexico;
 import analizadorsemantico.ConvertidorDeExp;
 import analizadorsemantico.GeneradorArbol;
 import analizadorsemantico.GeneradorCuartetos;
+import analizadorsemantico.OptimizadorLocal;
 import datos.Archivo;
 import datos.Gramatica;
 import estructurasDeDatos.ListaEnlazada;
@@ -13,6 +14,7 @@ public class Main {
   GeneradorArbol arboles;
   ConvertidorDeExp infijoAPostfijo;
   GeneradorCuartetos generadorDeCuartetos;
+  OptimizadorLocal optimizadorCuartetos;
   Pila pila;
   LexicoSintactico analizadorLexicoSintactico;
   ListaEnlazada temp;
@@ -87,6 +89,9 @@ public class Main {
     System.out.println("\nGeneración de código intermedio");
     generadorDeCuartetos = new GeneradorCuartetos(infijoAPostfijo.getExpPostfijas());
     generadorDeCuartetos.mostrarCuarteto();
+    System.out.println("\nOptimizador local");
+    optimizadorCuartetos = new OptimizadorLocal();
+    optimizadorCuartetos.optimiza();
   }
   public static void main(String[] args) {
     Main m = new Main();
