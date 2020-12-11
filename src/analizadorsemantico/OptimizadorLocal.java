@@ -56,7 +56,6 @@ public class OptimizadorLocal {
     archivoSalida = new EscribeEnArchivo();
     archivoSalida.crearArchivo("CuartetosOptimizado");
   }
-  
   private void captura(){
     try{
       archivoEntrada = new File("src/salidas/Cuartetos.txt");
@@ -67,18 +66,15 @@ public class OptimizadorLocal {
       System.out.println(">>>Error abriendo archivo Cuartetos.txt");
     }
   }
-  
   private void procesa(){
     boolean registrado = false;
     String[] lineaSegmentada = new String[3];
     ListaEnlazada contadores = new ListaEnlazada();                             //Lista enlazada de contadores. Contiene el id seguido del
                                                                                 //número de repeticiones
-    
     for(int i = 0; i < lineas.size(); i++){                                     //Para cada línea en el archivo.
       
       if(lineas.get(i).charAt(0) == '='){                                         //Si se trata de una instrucción de asignación
         lineaSegmentada = lineas.get(i).split(" ");                                 //Obten las cuatro partes de la instrucción
-        
         for (int j = 0; j < contadores.size(); j++){                                //Verifica si ya está registrado:
           if(contadores.get(j).getInfo().equals(lineaSegmentada[3])){
             int numeroActual = (int) contadores.get(j).getSiguiente().getInfo();      //Si está registrado, obten su contador
@@ -87,27 +83,19 @@ public class OptimizadorLocal {
             break;                                                                    //Procede a la siguiente línea del archivo
           }
         }
-        
         if(!registrado){                                                            //NO está registrado 
           contadores.add(new Nodo(lineaSegmentada[3]));                               //Añádelo a la lista de contadores.
           contadores.add(new Nodo(1));                                                //Añade su contador en 1
         }
-        
       }
-      
     }
-    
     //En este punto, tenemos completa la lista de contadores para optimizar
-    
     for(int i = lineas.size()-1; i >= 0; i--){                                    //Para cada línea en el archivo. Recorre de última a primera
-      
       if(lineas.get(i).charAt(0) == '='){                                         //Si se trata de una instrucción de asignación
         lineaSegmentada = lineas.get(i).split(" ");                                 //Obten las cuatro partes de la instrucción
-        
         //Si obtenemos una instrucción de asignación cuyo id ya se ha repetido,
         //debemos eliminarla. Para saber si ya pasamos la línea que queremos
         //conservar, modificaremos su contador a 0.
-
         if(contadores.exist(new Nodo(lineaSegmentada[3]))){                         //¿El id está en la lista de contadores?
           int indexContador = (int) contadores.indexOf(lineaSegmentada[3]) + 1;       //Obten el index de su contador
           if((int) contadores.get(indexContador).getInfo() == 0){                      //¿Ya se presentó la asignación a guardar?
@@ -121,12 +109,9 @@ public class OptimizadorLocal {
             contadores.get(indexContador).setInfo(0);
           }
         }
-        
       }
-    
     }
   }
-  
   private void escribe(){
     String[] lineaSegmentada = new String[3];
     System.out.println("OPERADOR\tOPERANDO1\tOPERANDO2\tRESULTADO");
@@ -138,15 +123,12 @@ public class OptimizadorLocal {
       System.out.println();
       archivoSalida.escribeLinea("CuartetosOptimizado", lineas.get(i));
     }
-    
   }
-  
   public void optimiza(){
     captura();
     procesa();
     escribe();
   }
-  
   public static void main(String[] args) {
     OptimizadorLocal ol = new OptimizadorLocal();
     ol.optimiza();

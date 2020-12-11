@@ -2,6 +2,7 @@ package lexicosintactico;
 import analizadorlexico.AnalizadorLexico;
 import analizadorsemantico.ConvertidorDeExp;
 import analizadorsemantico.GeneradorArbol;
+import analizadorsemantico.GeneradorCodigoObjeto;
 import analizadorsemantico.GeneradorCuartetos;
 import analizadorsemantico.OptimizadorLocal;
 import datos.Archivo;
@@ -15,6 +16,7 @@ public class Main {
   ConvertidorDeExp infijoAPostfijo;
   GeneradorCuartetos generadorDeCuartetos;
   OptimizadorLocal optimizadorCuartetos;
+  GeneradorCodigoObjeto generadorObjeto;
   Pila pila;
   LexicoSintactico analizadorLexicoSintactico;
   ListaEnlazada temp;
@@ -92,6 +94,9 @@ public class Main {
     System.out.println("\nOptimizador local");
     optimizadorCuartetos = new OptimizadorLocal();
     optimizadorCuartetos.optimiza();
+    System.out.println("Generación de Código Objeto");
+    generadorObjeto = new GeneradorCodigoObjeto();
+    generadorObjeto.generaCodigoObjeto();
   }
   public static void main(String[] args) {
     Main m = new Main();
